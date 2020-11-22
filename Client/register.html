@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+</head>
+<body>
+    <h1>Username</h1>
+    <input type="text" placeholder="username" id="username">
+    <br>
+    <h1>Password</h1>
+    <input type="password" placeholder="password" id="password">
+    <br><br>
+    <button id="submit">Register</button>
+    <br>
+    <h1><a href="index.html">Home</a></h1>
+    <h1><a href="login.html">Go To Login</a></h1>
+
+    <script>
+        document.querySelector("#submit").onclick = () => {
+            let username = document.querySelector("#username")
+            let password = document.querySelector("#password")
+            if (username.value == "" || password.value == "") {
+                alert("Username or Password Field Cannot Be Empty")
+            }
+            else {
+                fetch("http://localhost:2137/register", {
+                    method: "post",
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({username: username.value, password: password.value})
+                }).then(res => {
+                    res.text().then(t => {
+                        alert(t)
+                    })
+                })
+            }
+        }
+    </script>
+</body>
+</html>

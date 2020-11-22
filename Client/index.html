@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+</head>
+<body>
+    <h1><a href="register.html">Register</a></h1>
+    <br>
+    <h1><a href="login.html">Login</a></h1>
+    <script>
+        let token = localStorage.getItem("token")
+        if (token != null) {
+            fetch("http://localhost:2137/login", {
+                method: "post",
+                headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`}
+            }).then(res => {
+                res.text().then(t => {
+                    if (res.status === 202) {
+                        localStorage.setItem("token", t)
+                        window.open("profile.html","_self")
+                    }
+                    if (!res.ok) {
+                        console.log("token most likely expired")
+                        localStorage.removeItem("token")
+                    }
+                })
+            })
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+</head>
+<body>
+    <h1 id="username">Loading</h1>
+    <h5 id="id">Loading</h5>
+    <br>
+    <h1><a href="index.html">Home</a></h1>
+    <h1><a href="register.html">Go To Register</a></h1>
+    <h1><a href="login.html">Go To Login</a></h1>
+    <br>
+    <h1><button id="logout">Logout</button></h1>
+
+    <script>
+        let token = localStorage.getItem("token")
+        if (token != null) {
+            let username = document.querySelector("#username")
+            fetch("http://localhost:2137/myAccount", {
+                method: "post",
+                headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`}
+            }).then(res => {
+                if (res.ok) {
+                    res.json().then(r => {
+                        localStorage.setItem("token", r.token)
+                        username.innerText = `Username: ${r.username}`
+                        id.innerText = `Your ID: ${r.id}`
+                    })
+                }
+                else {
+                    res.text().then(t => {
+                        alert(t)
+                        localStorage.removeItem("token")
+                    })
+                }
+            })
+        }
+        else {
+            window.open("index.html","_self")
+        }
+        document.querySelector("#logout").onclick = () => {
+            localStorage.removeItem("token")
+            window.open("index.html","_self")
+        }
+    </script>
+</body>
+</html>
